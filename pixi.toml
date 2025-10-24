@@ -1,0 +1,19 @@
+[workspace]
+authors = ["Na-moe <yangziming@buaa.edu.cn>"]
+channels = ["conda-forge"]
+name = "CS229-Plot"
+platforms = ["win-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.14.*"
+numpy = ">=2.3.3,<3"
+pandas = ">=2.3.3,<3"
+matplotlib = ">=3.10.7,<4"
+scienceplots = ">=2.1.1,<3"
+ipykernel = ">=7.0.1,<8"
+pip = ">=25.2,<26"
+scipy = ">=1.16.2,<2"
+scikit-learn = ">=1.7.2,<2"
