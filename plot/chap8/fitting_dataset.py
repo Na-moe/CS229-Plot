@@ -1,0 +1,53 @@
+from pathlib import Path
+
+import numpy as np
+from numpy.polynomial.polynomial import Polynomial
+import pandas as pd
+
+from matplotlib import pyplot as plt
+
+from plot.utils import config_mpl, get_save_path
+
+
+def set_ax(ax, data_type: str):
+    ax.set_xlim(0, 1.0)
+    ax.set_xticks(np.arange(0, 1.1, 0.2))
+    ax.set_ylim(-0.4, 1.5)
+    ax.set_yticks(np.arange(0, 1.6, 0.5))
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_title(f"{data_type}集")
+    ax.legend([f"{data_type}数据", "真实 h*"], loc="upper left", fontsize=12)
+
+
+def plot_fitting_dataset():
+    # Configure Matplotlib
+    config_mpl()
+
+    # Data Loading
+    train = pd.read_csv("data/chap8/train.csv", dtype=float)
+    test = pd.read_csv("data/chap8/test.csv", dtype=float)
+
+    XX = np.concatenate((train["x"], test["x"]))
+    YY = np.concatenate((train["y"], test["y"]))
+    p = Polynomial.fit(XX, YY, 2)
+
+    xx = np.linspace(500, 5000, 100)
+
+    # Get Save Path
+    save_path = get_save_path(Path(__file__))
+
+    # Plot
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+    _ = [
+        ax.scatter(data["x"], data["y"], marker="x", color=color)
+        for ax, data, color in zip(axes, (train, test), ("blue", "orange"))
+    ]
+    _ = [ax.plot(xx, p(xx), color="black", linewidth=1.0) for ax in axes]
+    _ = [set_ax(ax, data_type) for ax, data_type in zip(axes, ("训练", "测试"))]
+
+    plt.savefig(save_path, format="svg", bbox_inches="tight", pad_inches=0.05)
+
+
+if __name__ == "__main__":
+    plot_fitting_dataset()
